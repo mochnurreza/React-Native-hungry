@@ -1,8 +1,26 @@
 import { View, Text, ScrollView } from "react-native";
-import React from "react";
-import RestaurantCard from "./cards/RestaurantCard"
+import React, { useState, useEffect } from "react";
+import RestaurantCard from "./cards/RestaurantCard";
+import sanityClient from "../../sanity";
 
-export default function Feature() {
+export default function Feature({ id, title, description }) {
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `*[_type == 'featured' && _id ==  ${id}] {..., restauranst[] -> {..., dishes[] ->, type -> { name }},}[0]`,
+        { id }
+      )
+      .then(({ data }) => {
+        console.log("restauranst:", data);
+        setRestaurants(data);
+      })
+      .catch((error) => {
+        console.log("error from feature:", error);
+      });
+  }, [id]);
+
   return (
     <View>
       <View className="mt-4 flex-row items-center justify-between px-4">
@@ -17,8 +35,22 @@ export default function Feature() {
         showsHorizontalScrollIndicator={false}
         className="pt-4"
       >
-        <RestaurantCard/>
+        {restaurants?.map((restaurant, i) => {
+          <RestaurantCard
+            key={`${restauran._id}-${i}`}
+            id={restaurant._id}
+            imgUrl={restaurant.image}
+            title={restaurant.name}
+            rating={restauran.rating}
+            genre={retauran.type?.name}
+            address={restauran.address}
+            shortDescription={restaurant.short_description}
+            dishes={restaurant.dishes}
+            long={restaurant.long}
+            lat={restaurant.lat}
+          />;
+        })}
       </ScrollView>
     </View>
   );
-};
+}

@@ -1,12 +1,12 @@
 import { TouchableOpacity, Text, Image } from "react-native";
 import React from "react";
 
-export default function CategoriesCard({ image, title }){
+export default function CategoriesCard({ imgUrl, title }){
   return (
     <TouchableOpacity className="relative mr-2">
       <Image
         source={{
-          uri: image,
+          uri: imgUrl,
         }}
         className="h-20 w-20 rounded"
       />

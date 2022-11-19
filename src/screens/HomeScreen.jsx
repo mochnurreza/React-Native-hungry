@@ -1,12 +1,33 @@
 import { View, Text, Image, TextInput, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Categories from "../components/Categories";
 import Feature from "../components/Feature";
+import sanityclient from "../../sanity";
 
 export default function HomeScreen() {
+  const [featuredCategories, setFeaturedCategories] = useState([])
+
   const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    })
+  }, [])
+
+  useEffect(() => {
+    sanityclient.fetch(`*[_type == 'featured'] {..., restaurants[] -> {..., dishes[] -> }}`)
+    .then(data => {
+      console.log("data:", data)
+      setFeaturedCategories(data)
+    })
+    .catch(error => {
+        console.log("error at hompage:", error)
+    })
+  }, [])
+  
   return (
     <SafeAreaView className="bg-white pt-5">
       <View className="flex-row pb-3 items-center mx-4 space-x-2">
@@ -35,7 +56,14 @@ export default function HomeScreen() {
       }}>
           {/* categories */}
           <Categories/>
-          <Feature/>
+          {featuredCategories?.map(category => {
+            <Feature
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+            />
+          })}
       </ScrollView>
     </SafeAreaView>
   );
