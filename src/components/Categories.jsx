@@ -1,17 +1,17 @@
-import { ScrollView, Text } from "react-native";
+import { FlatList, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import CategoriesCard from "./cards/CategoriesCard";
 import sanityClient, { urlFor } from "../../sanity";
 
 export default function Categories() {
-  const [categories, setcategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     sanityClient
       .fetch(`*[_type == "category"]`)
       .then((data) => {
         console.log("categories:", data);
-        setcategories(data);
+        setCategories(data);
       })
       .catch((error) => {
         consol.log("error from categories", error);
@@ -19,11 +19,12 @@ export default function Categories() {
   }, []);
 
   return (
-    <ScrollView
+    <FlatList
       contentContainerStyle={{
         paddingHorizontal: 15,
         paddingTop: 10,
       }}
+      data={categories}
       horizontal
       showsHorizontalScrollIndicator={false}
     >
@@ -34,6 +35,6 @@ export default function Categories() {
           title={category.name}
         />
       ))}
-    </ScrollView>
+    </FlatList>
   );
 }

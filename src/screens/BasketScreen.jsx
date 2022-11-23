@@ -15,7 +15,7 @@ import {
   selectBasket,
   selectBasketTotal,
 } from "../store/basket/Basketslice";
-import { urlFor } from "../sanity";
+import { urlFor } from "../../sanity";
 
 export default function BasketScreen() {
   const [groupItemsBasket, setGroupItemsBasket] = useState([])

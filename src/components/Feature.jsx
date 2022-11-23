@@ -12,7 +12,7 @@ export default function Feature({ id, title, description }) {
         `*[_type == 'featured' && _id ==  ${id}] {..., restauranst[] -> {..., dishes[] ->, type -> { name }},}[0]`,
         { id }
       )
-      .then(({ data }) => {
+      .then(( data ) => {
         console.log("restauranst:", data);
         setRestaurants(data);
       })
@@ -24,9 +24,9 @@ export default function Feature({ id, title, description }) {
   return (
     <View>
       <View className="mt-4 flex-row items-center justify-between px-4">
-        <Text className="font-bold text-lg">title</Text>
+        <Text className="font-bold text-lg">{title}</Text>
       </View>
-      <Text className="text-xs text-gray-500 px-4">Description</Text>
+      <Text className="text-xs text-gray-500 px-4">{description}</Text>
       <ScrollView
         horizontal
         contentContainerStyle={{
@@ -41,9 +41,9 @@ export default function Feature({ id, title, description }) {
             id={restaurant._id}
             imgUrl={restaurant.image}
             title={restaurant.name}
-            rating={restauran.rating}
-            genre={retauran.type?.name}
-            address={restauran.address}
+            rating={restaurant.rating}
+            genre={retaurant.type?.name}
+            address={restaurant.address}
             shortDescription={restaurant.short_description}
             dishes={restaurant.dishes}
             long={restaurant.long}
